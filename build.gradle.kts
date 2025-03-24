@@ -53,7 +53,7 @@ dependencies {
     api("co.aikar:acf-paper:0.5.1-SNAPSHOT")
     api("com.tcoded:FoliaLib:0.4.2")
 
-    compileOnly("net.essentialsx:EssentialsX:2.20.1")
+    compileOnly("net.essentialsx:EssentialsX:2.21.0")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
 
