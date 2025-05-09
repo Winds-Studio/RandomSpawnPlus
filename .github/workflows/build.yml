@@ -13,11 +13,11 @@ jobs:
     if: "github.actor != 'dependabot[bot]'"
     steps:
       - uses: actions/checkout@main
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@main
         with:
-          java-version: 17
-          distribution: temurin
+          java-version: 21
+          distribution: zulu
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -31,5 +31,5 @@ jobs:
           title: "RandomSpawnPlus"
           automatic_release_tag: "6.0.0-SNAPSHOT"
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: "build/libs/*.jar"
+          files: "Common/build/libs/*.jar"
           prerelease: true
