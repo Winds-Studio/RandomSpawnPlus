@@ -54,7 +54,7 @@ dependencies {
     api("com.tcoded:FoliaLib:0.4.2")
 
     compileOnly("net.essentialsx:EssentialsX:2.20.1")
-    compileOnly("net.luckperms:api:5.4")
+    compileOnly("net.luckperms:api:5.5")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
 
     api("net.kyori:adventure-platform-bukkit:4.3.4")
