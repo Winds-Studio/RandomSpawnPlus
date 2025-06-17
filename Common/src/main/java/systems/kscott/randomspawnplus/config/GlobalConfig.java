@@ -115,7 +115,6 @@ public class GlobalConfig {
         );
         randomSpawnUsePermNode = getBoolean(spawnControlPath + "use-permission-node", randomSpawnUsePermNode, "Will only random spawn for player who has `randomspawnplus.randomspawn` permission node?");
 
-
         homeIntegrationMode = getString(hooksPath + "home-integration-mode", homeIntegrationMode);
         useHomeOnDeath = getBoolean(hooksPath + "use-home-on-death", useHomeOnDeath, "Use plugin's home on random spawn when dead");
         setHomeOnFirstJoinSpawn = getBoolean(hooksPath + "set-home-first-join-random-spawn", setHomeOnFirstJoinSpawn, "Use plugin's home on first join random spawn");

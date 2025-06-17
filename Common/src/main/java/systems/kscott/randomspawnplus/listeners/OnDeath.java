@@ -23,31 +23,28 @@ public class OnDeath implements Listener {
 
         Player player = event.getPlayer();
 
-        if (player.isDead()) {
-            /*
-            if (!config.getBoolean("use-permission-node") || (config.getBoolean("use-permission-node") && player.hasPermission("randomspawnplus.randomspawn"))) {
-                if (Config.getGlobalConfig().randomSpawnAtBed) {
-                    if (player.getBedSpawnLocation() != null) {
-                        event.setRespawnLocation(player.getBedSpawnLocation());
-                        return;
-                    }
-                }
+        if (!player.isDead()) return;
 
-                Location location;
+        if (Config.getGlobalConfig().randomSpawnUsePermNode && !player.hasPermission("randomspawnplus.randomspawn"))
+            return;
 
-                try {
-                    location = SpawnFinder.getInstance().findSpawn(true).add(0.5, 0, 0.5);
-                } catch (Exception e) {
-                    RandomSpawnPlus.getInstance().getLogger().warning("The spawn finder failed to find a valid spawn, and has not given " + player.getName() + " a random spawn. If you find this happening a lot, then raise the 'spawn-finder-tries-before-timeout' key in the config.");
-                    return;
-                }
-
-                RandomSpawnEvent randomSpawnEvent = new RandomSpawnEvent(location, player, SpawnType.ON_DEATH);
-
-                Bukkit.getServer().getPluginManager().callEvent(randomSpawnEvent);
-                event.setRespawnLocation(location);
-            }
-             */
+        if (Config.getGlobalConfig().randomSpawnAtBed && player.getBedSpawnLocation() != null) {
+            event.setRespawnLocation(player.getBedSpawnLocation());
+            return;
         }
+
+        Location location;
+
+        try {
+            location = SpawnFinder.getRandomSpawn();
+        } catch (Exception e) {
+            RandomSpawnPlus.getInstance().getLogger().warning("The spawn finder failed to find a valid spawn, and has not given " + player.getName() + " a random spawn. If you find this happening a lot, then raise the 'spawn-finder-tries-before-timeout' key in the config.");
+            return;
+        }
+
+        RandomSpawnEvent randomSpawnEvent = new RandomSpawnEvent(location, player, SpawnType.ON_DEATH);
+
+        Bukkit.getServer().getPluginManager().callEvent(randomSpawnEvent);
+        event.setRespawnLocation(location);
     }
 }

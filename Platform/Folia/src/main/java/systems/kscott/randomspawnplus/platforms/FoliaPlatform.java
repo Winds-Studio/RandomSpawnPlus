@@ -10,7 +10,8 @@ public class FoliaPlatform extends PaperPlatform {
 
     @Override
     public CompletableFuture<LongArrayList> collectNonGeneratedChunksAsync(World level, int minX, int minZ, int maxX, int maxZ) {
-        throw new UnsupportedOperationException();
+        // TODO: check if work on folia and remove it.
+        return super.collectNonGeneratedChunksAsync(level, minX, minZ, maxX, maxZ);
     }
 
     @Override

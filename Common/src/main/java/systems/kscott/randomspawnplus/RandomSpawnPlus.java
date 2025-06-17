@@ -14,6 +14,7 @@ import systems.kscott.randomspawnplus.listeners.OnDeath;
 import systems.kscott.randomspawnplus.listeners.OnFirstJoin;
 import systems.kscott.randomspawnplus.listeners.OnPreLogin;
 import systems.kscott.randomspawnplus.spawn.SpawnFinder;
+import systems.kscott.randomspawnplus.spawn.SpawnGenerator;
 import systems.kscott.randomspawnplus.util.PlatformUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,7 +46,7 @@ public final class RandomSpawnPlus extends JavaPlugin {
         registerHooks();
 
         PlatformUtil.init();
-        SpawnFinder.init();
+        SpawnGenerator.init();
         //SpawnCacher.initialize();
     }
 

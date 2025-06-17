@@ -1,49 +1,37 @@
 package systems.kscott.randomspawnplus.spawn;
 
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import systems.kscott.randomspawnplus.config.Config;
-import systems.kscott.randomspawnplus.platforms.UniversalPlatform;
-import systems.kscott.randomspawnplus.util.PlatformUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.World;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import systems.kscott.randomspawnplus.RandomSpawnPlus;
+import org.bukkit.Location;
 
 public class SpawnFinder {
 
-    public static World spawnLevel;
-    private static ArrayList<Material> unsafeBlocks;
+    public static Location getRandomSpawn() {
+        boolean valid = false;
+        Location location = null;
 
-    public static void init() {
-        initializeSpawnChunks();
-        /* Setup safeblocks */
-        List<String> unsafeBlockStrings;
-        //unsafeBlockStrings = config.getStringList("unsafe-blocks");
+        int tries = 0;
+        while (!valid) {
+            if (tries >= 30) {
+                throw new Exception();
+            }
+            if (SpawnCacher.getInstance().getCachedSpawns().isEmpty()) {
+                RandomSpawnPlus.getInstance().getLogger().severe(Chat.get("no-spawns-cached"));
+            }
+            if (!SpawnCacher.getInstance().getCachedSpawns().isEmpty()) {
+                location = SpawnCacher.getInstance().getRandomSpawn();
+            } else {
+                location = getCandidateLocation();
+            }
+            valid = checkSpawn(location);
 
-        //unsafeBlocks = new ArrayList<>();
-        //for (String string : unsafeBlockStrings) {
-        //    unsafeBlocks.add(Material.matchMaterial(string));
-        //}
-    }
+            if (!valid) {
+                SpawnCacher.getInstance().deleteSpawn(location);
+            }
+            tries = tries + 1;
+        }
+        if (location == null) return null;
 
-    private static void initializeSpawnChunks() {
-        String worldStr = Config.getGlobalConfig().respawnWorld;
-        spawnLevel = Bukkit.getWorld(worldStr);
-        int minX = Config.getGlobalConfig().spawnRangeMinX;
-        int minZ = Config.getGlobalConfig().spawnRangeMinZ;
-        int maxX = Config.getGlobalConfig().spawnRangeMaxX;
-        int maxZ = Config.getGlobalConfig().spawnRangeMaxZ;
-
-        long start = System.currentTimeMillis();
-        CompletableFuture<LongArrayList> prepareChunksTask = PlatformUtil.getPlatform().collectNonGeneratedChunksAsync(spawnLevel, minX, minZ, maxX, maxZ);
-
-        prepareChunksTask.thenAccept($ -> {
-            System.out.println("Prepare chunks took " + (System.currentTimeMillis() - start) + "ms");
-            UniversalPlatform.finalizeSpawnChunksGeneration();
-        });
+        return location.add(0.5, 1, 0.5);
     }
 
     /*
@@ -95,52 +83,6 @@ public class SpawnFinder {
         int candidateY = getHighestY(world, candidateX, candidateZ);
 
         return new Location(world, candidateX, candidateY, candidateZ);
-    }
-
-    private Location getValidLocation(boolean useSpawnCaching) throws Exception {
-        boolean useCache = config.getBoolean("enable-spawn-cacher");
-
-        boolean valid = false;
-
-        Location location = null;
-
-        int tries = 0;
-        while (!valid) {
-            if (tries >= 30) {
-                throw new Exception();
-            }
-            if (SpawnCacher.getInstance().getCachedSpawns().isEmpty()) {
-                RandomSpawnPlus.getInstance().getLogger().severe(Chat.get("no-spawns-cached"));
-            }
-            if (useCache && useSpawnCaching && !SpawnCacher.getInstance().getCachedSpawns().isEmpty()) {
-                location = SpawnCacher.getInstance().getRandomSpawn();
-            } else {
-                location = getCandidateLocation();
-            }
-            valid = checkSpawn(location);
-
-            if (!valid && useCache && useSpawnCaching) {
-                SpawnCacher.getInstance().deleteSpawn(location);
-            }
-            tries = tries + 1;
-        }
-        if (location == null) return null;
-        return location;
-    }
-
-    public Location findSpawn(boolean useSpawnCaching) throws Exception {
-
-        Location location = getValidLocation(useSpawnCaching);
-        if (location == null) return null;
-
-        if (config.getBoolean("debug-mode")) {
-            Location locClone = location.clone();
-            System.out.println(locClone.getBlock().getType());
-            System.out.println(locClone.add(0, 1, 0).getBlock().getType());
-            System.out.println(locClone.add(0, 1, 0).getBlock().getType());
-            System.out.println("Spawned at " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ());
-        }
-        return location.add(0, 1, 0);
     }
 
     public boolean checkSpawn(Location location) {

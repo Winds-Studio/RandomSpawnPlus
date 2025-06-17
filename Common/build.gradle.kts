@@ -6,7 +6,7 @@ plugins {
 val adventureVersion = "4.17.0"
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.3-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT")
 
     implementation(project(":Platform:Abstraction"))
     implementation(project(":Platform:Folia"))
@@ -18,7 +18,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.1.0")
     api("co.aikar:acf-paper:0.5.1-SNAPSHOT") // Remove
     implementation("com.github.technicallycoded:FoliaLib:0.4.3")
-    implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.2")
+    implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.3")
 
     compileOnly("net.essentialsx:EssentialsX:2.20.1")
     compileOnly("net.luckperms:api:5.4")
@@ -52,4 +52,3 @@ publishing {
         from(components["java"])
     }
 }
-

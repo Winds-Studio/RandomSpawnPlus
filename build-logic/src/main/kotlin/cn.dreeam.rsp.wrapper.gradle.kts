@@ -27,6 +27,12 @@ repositories {
         url = uri("https://repo.aikar.co/content/groups/aikar/")
     }
 
+    // ConfigurationMaster API
+    maven {
+        name = "ConfigurationMaster-repo"
+        url = uri("https://repo.bsdevelopment.org/releases/")
+    }
+
     // JitPack
     maven {
         name = "jitpack.io"
@@ -37,12 +43,6 @@ repositories {
     maven {
         name = "devmart-other"
         url = uri("https://nexuslite.gcnt.net/repos/other/")
-    }
-
-    // ConfigurationMaster API
-    maven {
-        name = "ConfigurationMaster-repo"
-        url = uri("https://ci.pluginwiki.us/plugin/repository/everything/")
     }
 }
 

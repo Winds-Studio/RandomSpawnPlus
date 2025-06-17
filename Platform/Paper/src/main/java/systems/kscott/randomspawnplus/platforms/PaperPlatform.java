@@ -19,6 +19,7 @@ public class PaperPlatform implements Platforms {
     }
 
     private static final AtomicInteger counter = new AtomicInteger(0);
+
     private CompletableFuture<LongArrayList> collectNonGeneratedChunks(World level, int minX, int minZ, int maxX, int maxZ) {
         int minChunkX = minX >> 4;
         int minChunkZ = minZ >> 4;
@@ -57,7 +58,7 @@ public class PaperPlatform implements Platforms {
         LongArrayList nonGeneratedChunks = new LongArrayList();
 
         return CompletableFuture.supplyAsync(() -> {
-            int count = 0;
+                    int count = 0;
                     for (long chunkKey : partitionChunks) {
                         int chunkX = (int) chunkKey;
                         int chunkZ = (int) (chunkKey >> 32);

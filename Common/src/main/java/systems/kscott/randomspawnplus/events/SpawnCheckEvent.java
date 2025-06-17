@@ -26,7 +26,6 @@ public class SpawnCheckEvent extends Event {
         return HANDLERS_LIST;
     }
 
-
     public void setValid(boolean valid, String reason) {
         this.validReason = reason;
         this.valid = valid;
