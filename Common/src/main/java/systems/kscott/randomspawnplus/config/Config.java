@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
 import systems.kscott.randomspawnplus.util.MessageUtil;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -24,7 +25,7 @@ public class Config {
     private static final String CURRENT_REGION = Locale.getDefault().getCountry().toUpperCase(Locale.ROOT);
     private static final String GLOBAL_CONFIG_FILE_NAME = "config.yml";
     private static final String LANG_CONFIG_FILE_NAME = "lang.yml";
-    private static final String SPAWN_STORAGE_FILE_NAME = "spawns.yml";
+    public static final String SPAWN_STORAGE_FILE_NAME = "spawns.yml"; // public since used in other classes
 
     private static ConfigLocale configLocale;
     private static GlobalConfig globalConfig;
@@ -107,7 +108,7 @@ public class Config {
     private static void loadSpawnStorage(File pluginFolder, boolean init) throws Exception {
         spawnStorage = new SpawnStorage(pluginFolder, SPAWN_STORAGE_FILE_NAME, init);
 
-        spawnStorage.saveConfig();
+        spawnStorage.saveConfig(pluginFolder);
     }
 
     public static void createDirectory(File dir) throws IOException {
@@ -132,6 +133,10 @@ public class Config {
 
     public static LangConfig getLangConfig() {
         return langConfig;
+    }
+
+    public static SpawnStorage getSpawnStorage() {
+        return spawnStorage;
     }
 
     public static void getLastConfigVersion(String lastConfigVer) {

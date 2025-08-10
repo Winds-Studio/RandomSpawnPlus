@@ -1,15 +1,27 @@
 package systems.kscott.randomspawnplus.spawn;
 
-import net.milkbowl.vault.chat.Chat;
+import com.tcoded.folialib.wrapper.task.WrappedTask;
+import org.jetbrains.annotations.Nullable;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
+import systems.kscott.randomspawnplus.config.Config;
 import systems.kscott.randomspawnplus.events.SpawnCheckEvent;
+import systems.kscott.randomspawnplus.util.Locations;
 import systems.kscott.randomspawnplus.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
 public class SpawnFinder {
+
+    private static final List<String> cachedSpawns = new ArrayList<>();
+    private WrappedTask cacheSpawnTask;
 
     public static Location getRandomSpawn() throws Exception {
         boolean valid = false;
@@ -17,31 +29,33 @@ public class SpawnFinder {
 
         int tries = 0;
         while (!valid) {
+            // TODO: configure here
             if (tries >= 30) {
                 throw new Exception();
             }
-            if (SpawnCacher.getInstance().getCachedSpawns().isEmpty()) {
-                RandomSpawnPlus.getInstance().getLogger().severe(Chat.get("no-spawns-cached"));
+            if (cachedSpawns.isEmpty()) {
+                String msg = Config.getLangConfig().noSpawnFound;
+                RandomSpawnPlus.getInstance().getLogger().severe(msg);
             }
-            if (!SpawnCacher.getInstance().getCachedSpawns().isEmpty()) {
-                location = SpawnCacher.getInstance().getRandomSpawn();
+            if (!cachedSpawns.isEmpty()) {
+                location = getRandomSpawn2();
             } else {
                 location = getCandidateLocation();
             }
             valid = checkSpawn(location);
 
             if (!valid) {
-                SpawnCacher.getInstance().deleteSpawn(location);
+                deleteSpawn(location);
             }
-            tries = tries + 1;
+            tries++;
         }
-        if (location == null) return null;
 
         return location.add(0.5, 1, 0.5);
     }
 
-    public Location getCandidateLocation() {
-        String worldString = config.getString("respawn-world");
+    @Nullable
+    public static Location getCandidateLocation() {
+        String worldString = Config.getGlobalConfig().respawnWorld;
 
         if (worldString == null) {
             RandomSpawnPlus.getInstance().getLogger().severe("You've incorrectly defined the `respawn-world` key in the config.");
@@ -57,21 +71,21 @@ public class SpawnFinder {
             return null;
         }
 
-        int minX = config.getInt("spawn-range.min-x");
-        int minZ = config.getInt("spawn-range.min-z");
-        int maxX = config.getInt("spawn-range.max-x");
-        int maxZ = config.getInt("spawn-range.max-z");
+        int minX = Config.getGlobalConfig().spawnRangeMinX;
+        int minZ = Config.getGlobalConfig().spawnRangeMinZ;
+        int maxX = Config.getGlobalConfig().spawnRangeMaxX;
+        int maxZ = Config.getGlobalConfig().spawnRangeMaxZ;
 
-        if (config.getBoolean("blocked-spawns-zone.enabled")) {
-            int minXblocked = config.getInt("blocked-spawns-zone.min-x");
-            int minZblocked = config.getInt("blocked-spawns-zone.min-z");
-            int maxXblocked = config.getInt("blocked-spawns-zone.max-x");
-            int maxZblocked = config.getInt("blocked-spawns-zone.max-z");
+        if (Config.getGlobalConfig().blockedSpawnZoneEnabled) {
+            final int blockedMinX = Config.getGlobalConfig().blockedSpawnZoneMinX;
+            final int blockedMinZ = Config.getGlobalConfig().blockedSpawnZoneMinZ;
+            final int blockedMaxX = Config.getGlobalConfig().blockedSpawnZoneMaxX;
+            final int blockedMaxZ = Config.getGlobalConfig().blockedSpawnZoneMaxZ;
 
-            SpawnRegion region1 = new SpawnRegion(minX, minXblocked, minZ, minZblocked);
-            SpawnRegion region2 = new SpawnRegion(minXblocked, maxXblocked, minZblocked, maxZ - maxZblocked);
-            SpawnRegion region3 = new SpawnRegion(maxXblocked, maxX, maxZblocked, maxX);
-            SpawnRegion region4 = new SpawnRegion(minZblocked, maxZ - minZblocked, minZ + minXblocked, maxZ - minZblocked);
+            SpawnRegion region1 = new SpawnRegion(minX, blockedMinX, minZ, blockedMinZ);
+            SpawnRegion region2 = new SpawnRegion(blockedMinX, blockedMaxX, blockedMaxZ, maxZ - blockedMaxZ);
+            SpawnRegion region3 = new SpawnRegion(blockedMaxX, maxX, blockedMaxZ, maxX);
+            SpawnRegion region4 = new SpawnRegion(blockedMinZ, maxZ - blockedMinZ, minZ + blockedMinX, maxZ - blockedMinZ);
 
             SpawnRegion[] spawnRegions = new SpawnRegion[]{region1, region2, region3, region4};
 
@@ -90,18 +104,15 @@ public class SpawnFinder {
         return new Location(world, candidateX, candidateY, candidateZ);
     }
 
-    public boolean checkSpawn(Location location) {
+    public static boolean checkSpawn(Location location) {
         if (location == null) return false;
 
-        boolean blockWaterSpawns = config.getBoolean("block-water-spawns");
-        boolean blockLavaSpawns = config.getBoolean("block-lava-spawns");
-        boolean debugMode = config.getBoolean("debug-mode");
-        boolean blockedSpawnRange = config.getBoolean("blocked-spawns-zone.enabled");
+        final boolean blockedSpawnRange = Config.getGlobalConfig().blockedSpawnZoneEnabled;
 
-        int blockedMaxX = config.getInt("blocked-spawns-zone.max-x");
-        int blockedMinX = config.getInt("blocked-spawns-zone.min-x");
-        int blockedMaxZ = config.getInt("blocked-spawns-zone.max-z");
-        int blockedMinZ = config.getInt("blocked-spawns-zone.min-z");
+        final int blockedMinX = Config.getGlobalConfig().blockedSpawnZoneMinX;
+        final int blockedMinZ = Config.getGlobalConfig().blockedSpawnZoneMinZ;
+        final int blockedMaxX = Config.getGlobalConfig().blockedSpawnZoneMaxX;
+        final int blockedMaxZ = Config.getGlobalConfig().blockedSpawnZoneMaxZ;
 
         boolean isValid;
 
@@ -121,12 +132,6 @@ public class SpawnFinder {
 
         isValid = spawnCheckEvent.isValid();
 
-        if (!isValid) {
-            if (debugMode) {
-                System.out.println("Invalid spawn: " + spawnCheckEvent.getValidReason());
-            }
-        }
-
         if (blockedSpawnRange) {
             if (Util.betweenExclusive((int) location.getX(), blockedMinX, blockedMaxX)) {
                 isValid = false;
@@ -137,57 +142,98 @@ public class SpawnFinder {
         }
 
         if (block0.getType().isAir()) {
-            if (debugMode) {
-                System.out.println("Invalid spawn: block0 isAir");
-            }
             isValid = false;
         }
 
         if (!block1.getType().isAir() || !block2.getType().isAir()) {
-            if (debugMode) {
-                System.out.println("Invalid spawn: block1 or block2 !isAir");
-            }
             isValid = false;
         }
 
-        if (unsafeBlocks.contains(block1.getType())) {
-            if (debugMode) {
-                System.out.println("Invalid spawn: " + block1.getType() + " is not a safe block!");
-            }
+        if (SpawnData.getUnsafeBlocks() != null && SpawnData.getUnsafeBlocks().contains(block1.getType())) {
             isValid = false;
         }
 
-        if (blockWaterSpawns) {
-            if (block0.getType() == Material.WATER) {
-                if (debugMode) {
-                    System.out.println("Invalid spawn: blockWaterSpawns");
-                }
-                isValid = false;
-            }
+        // TODO: detect unsafe-blocks contains water
+        if (true && block0.getType() == Material.WATER) {
+            isValid = false;
         }
 
-        if (blockLavaSpawns) {
-            if (block0.getType() == Material.LAVA) {
-                if (debugMode) {
-                    System.out.println("Invalid spawn: blockLavaSpawns");
-                }
-                isValid = false;
-            }
+        // TODO: detect unsafe-blocks contains lava
+        if (true && block0.getType() == Material.LAVA) {
+            isValid = false;
         }
 
         return isValid;
     }
 
-    public int getHighestY(World world, int x, int z) {
+    private void cacheSpawns() {
+        List<String> locationStrings = Config.getSpawnStorage().get().getStringList("spawns");
+
+        cachedSpawns.addAll(locationStrings);
+
+        int missingLocations = Config.getGlobalConfig().spawnCacheCount - locationStrings.size();
+
+        if (missingLocations <= 0) {
+            return;
+        }
+
+        List<String> newLocations = new ArrayList<>();
+
+        Bukkit.getLogger().info("Caching " + missingLocations + " spawns.");
+        for (int i = 0; i <= missingLocations; i++) {
+            RandomSpawnPlus.getInstance().foliaLib.getScheduler().runLater(() -> {
+                Location location = null;
+                boolean valid = false;
+
+                while (!valid) {
+                    location = getCandidateLocation();
+                    valid = checkSpawn(location);
+                }
+
+                newLocations.add(Locations.serializeString(location));
+            }, 1);
+        }
+
+        cacheSpawnTask = RandomSpawnPlus.getInstance().foliaLib.getScheduler().runTimer(() -> {
+            // Wait for all spawns to be cached
+            if (newLocations.size() <= missingLocations) {
+                if (RandomSpawnPlus.getInstance().getConfig().getBoolean("debug-mode")) {
+                    System.out.println(newLocations.size() + ", " + missingLocations);
+                }
+            } else {
+                cachedSpawns.addAll(newLocations);
+                // Save spawns to file
+                Config.getSpawnStorage().get().set("spawns", cachedSpawns);
+                RandomSpawnPlus.getInstance().saveConfig();
+
+                RandomSpawnPlus.getInstance().foliaLib.getScheduler().cancelTask(cacheSpawnTask);
+            }
+        }, 10, 10);
+    }
+
+
+    public static Location getRandomSpawn2() {
+        int element = ThreadLocalRandom.current().nextInt(cachedSpawns.size());
+        return Locations.deserializeLocationString(cachedSpawns.get(element));
+    }
+
+    public static void deleteSpawn(Location location) {
+        cachedSpawns.removeIf(locationString -> Locations.serializeString(location).equals(locationString));
+        Config.getSpawnStorage().get().set("spawns", cachedSpawns);
+        try {
+            Config.getSpawnStorage().saveConfig(RandomSpawnPlus.getInstance().getDataFolder());
+        } catch (IOException e) {
+            Config.LOGGER.error("Failed to save " + Config.SPAWN_STORAGE_FILE_NAME + "!", e);
+        }
+    }
+
+    public static int getHighestY(World world, int x, int z) {
         int maxHeight = world.getMaxHeight();
         int minHeight = world.getMinHeight();
 
         for (int i = maxHeight; i >= minHeight; i--) {
             Location location = new Location(world, x, i, z);
             if (!location.getBlock().isEmpty()) {
-                if (config.getBoolean("debug-mode")) {
-                    System.out.println(i);
-                }
                 return i;
             }
         }

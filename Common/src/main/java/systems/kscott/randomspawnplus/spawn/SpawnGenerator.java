@@ -5,25 +5,32 @@ import systems.kscott.randomspawnplus.config.Config;
 import systems.kscott.randomspawnplus.platforms.UniversalPlatform;
 import systems.kscott.randomspawnplus.util.PlatformUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class SpawnGenerator {
 
     public static void init() {
+        initUnsafeBlocks();
         initSpawnChunks();
+    }
 
-        /* Setup safeblocks */
-        // TODO: Implement it
-        List<String> unsafeBlockStrings;
-        //unsafeBlockStrings = config.getStringList("unsafe-blocks");
+    private static void initUnsafeBlocks() {
+        List<String> unsafeBlockStrings = Config.getGlobalConfig().unsafeBlocks;
 
-        //unsafeBlocks = new ArrayList<>();
-        //for (String string : unsafeBlockStrings) {
-        //    unsafeBlocks.add(Material.matchMaterial(string));
-        //}
+        if (unsafeBlockStrings.isEmpty()) return;
+
+        SpawnData.setUnsafeBlocks(new HashSet<>());
+
+        for (String str : unsafeBlockStrings) {
+            // TODO: use XMaterial here
+            Material material = Material.matchMaterial(str);
+            SpawnData.getUnsafeBlocks().add(material);
+        }
     }
 
     private static void initSpawnChunks() {
