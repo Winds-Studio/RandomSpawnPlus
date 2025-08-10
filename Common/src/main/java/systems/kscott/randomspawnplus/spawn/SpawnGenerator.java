@@ -16,6 +16,7 @@ public class SpawnGenerator {
         initSpawnChunks();
 
         /* Setup safeblocks */
+        // TODO: Implement it
         List<String> unsafeBlockStrings;
         //unsafeBlockStrings = config.getStringList("unsafe-blocks");
 
@@ -37,6 +38,7 @@ public class SpawnGenerator {
         CompletableFuture<LongArrayList> prepareChunksTask = PlatformUtil.getPlatform().collectNonGeneratedChunksAsync(spawnLevel, minX, minZ, maxX, maxZ);
 
         prepareChunksTask.thenAccept($ -> {
+            // TODO: change to logger or remove
             System.out.println("Prepare chunks took " + (System.currentTimeMillis() - start) + "ms");
             UniversalPlatform.finalizeSpawnChunksGeneration();
         });

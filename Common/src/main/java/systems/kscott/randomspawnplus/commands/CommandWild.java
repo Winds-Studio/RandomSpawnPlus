@@ -86,7 +86,7 @@ public class CommandWild extends BaseCommand {
         RandomSpawnEvent randomSpawnEvent = new RandomSpawnEvent(location, player, SpawnType.WILD_COMMAND);
 
         Bukkit.getServer().getPluginManager().callEvent(randomSpawnEvent);
-        RandomSpawnPlus.getInstance().foliaLib.getImpl().teleportAsync(player, location.add(0.5, 0, 0.5));
+        RandomSpawnPlus.getInstance().foliaLib.getScheduler().teleportAsync(player, location.add(0.5, 0, 0.5));
         Util.addCooldown(player);
     }
 
@@ -128,7 +128,7 @@ public class CommandWild extends BaseCommand {
             location.getChunk().load();
         }
 
-        RandomSpawnPlus.getInstance().foliaLib.getImpl().teleportAsync(otherPlayer, location.add(0.5, 0, 0.5));
+        RandomSpawnPlus.getInstance().foliaLib.getScheduler().teleportAsync(otherPlayer, location.add(0.5, 0, 0.5));
          */
     }
 }

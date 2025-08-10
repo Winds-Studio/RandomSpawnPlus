@@ -21,30 +21,30 @@ public class PaperPlatform implements Platforms {
     private static final AtomicInteger counter = new AtomicInteger(0);
 
     private CompletableFuture<LongArrayList> collectNonGeneratedChunks(World level, int minX, int minZ, int maxX, int maxZ) {
-        int minChunkX = minX >> 4;
-        int minChunkZ = minZ >> 4;
-        int maxChunkX = maxX >> 4;
-        int maxChunkZ = maxZ >> 4;
+        final int minChunkX = minX >> 4;
+        final int minChunkZ = minZ >> 4;
+        final int maxChunkX = maxX >> 4;
+        final int maxChunkZ = maxZ >> 4;
 
-        LongArrayList chunks = new LongArrayList();
-        LongArrayList nonGeneratedChunksTotal = new LongArrayList();
-        List<CompletableFuture<LongArrayList>> futures = new ArrayList<>();
-        int parallelThreads = Runtime.getRuntime().availableProcessors() * 4;
+        final LongArrayList chunks = new LongArrayList();
+        final LongArrayList nonGeneratedChunksTotal = new LongArrayList();
+        final List<CompletableFuture<LongArrayList>> futures = new ArrayList<>();
+        final int parallelThreads = Runtime.getRuntime().availableProcessors() * 4;
 
         // Collect all chunks into one list
         for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
             for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
-                long chunkKey = Chunk.getChunkKey(chunkX, chunkZ);
+                final long chunkKey = Chunk.getChunkKey(chunkX, chunkZ);
                 chunks.add(chunkKey);
             }
         }
 
-        int partitionSize = chunks.size() / parallelThreads;
+        final int partitionSize = chunks.size() / parallelThreads;
 
         for (int i = 0; i < chunks.size(); i += partitionSize) {
-            int end = Math.min(chunks.size(), i + partitionSize);
-            LongList partitionList = chunks.subList(i, end);
-            CompletableFuture<LongArrayList> partitionChunksCollectTask = checkChunksGenerated(level, partitionList);
+            final int end = Math.min(chunks.size(), i + partitionSize);
+            final LongList partitionList = chunks.subList(i, end);
+            final CompletableFuture<LongArrayList> partitionChunksCollectTask = checkChunksGenerated(level, partitionList);
 
             partitionChunksCollectTask.thenAccept(nonGeneratedChunksTotal::addAll);
             futures.add(partitionChunksCollectTask);
@@ -55,7 +55,7 @@ public class PaperPlatform implements Platforms {
     }
 
     private static CompletableFuture<LongArrayList> checkChunksGenerated(World level, LongList partitionChunks) {
-        LongArrayList nonGeneratedChunks = new LongArrayList();
+        final LongArrayList nonGeneratedChunks = new LongArrayList();
 
         return CompletableFuture.supplyAsync(() -> {
                     int count = 0;
@@ -64,6 +64,7 @@ public class PaperPlatform implements Platforms {
                         int chunkZ = (int) (chunkKey >> 32);
 
                         counter.incrementAndGet();
+                        // TODO: remove debug
                         if (count++ == 1000) {
                             System.out.println(counter.get());
                             System.out.println("NON chunks size: " + nonGeneratedChunks.size());

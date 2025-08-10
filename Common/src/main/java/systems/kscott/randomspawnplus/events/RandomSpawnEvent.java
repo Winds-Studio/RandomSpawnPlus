@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
 public class RandomSpawnEvent extends Event {
 
     private static final HandlerList HANDLERS_LIST = new HandlerList();
+
     private final Location location;
     private final Player player;
     private final SpawnType spawnType;
@@ -21,6 +22,10 @@ public class RandomSpawnEvent extends Event {
 
     @Override
     public @NotNull HandlerList getHandlers() {
+        return HANDLERS_LIST;
+    }
+
+    public static HandlerList getHandlerList() {
         return HANDLERS_LIST;
     }
 }

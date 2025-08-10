@@ -18,19 +18,19 @@ public class SpigotPlatform implements Platforms {
     }
 
     private LongArrayList collectNonGeneratedChunks(World level, int minX, int minZ, int maxX, int maxZ) {
-        int minChunkX = minX >> 4;
-        int minChunkZ = minZ >> 4;
-        int maxChunkX = maxX >> 4;
-        int maxChunkZ = maxZ >> 4;
+        final int minChunkX = minX >> 4;
+        final int minChunkZ = minZ >> 4;
+        final int maxChunkX = maxX >> 4;
+        final int maxChunkZ = maxZ >> 4;
 
-        LongArrayList chunks = new LongArrayList();
+        final LongArrayList chunks = new LongArrayList();
 
         for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
             for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
-                Chunk chunk = level.getChunkAt(chunkX, chunkZ, true);
+                final Chunk chunk = level.getChunkAt(chunkX, chunkZ, true);
 
                 if (!chunk.isGenerated()) {
-                    long chunkKey = (long) chunkX & 0xffffffffL | ((long) chunkZ & 0xffffffffL) << 32;
+                    final long chunkKey = (long) chunkX & 0xffffffffL | ((long) chunkZ & 0xffffffffL) << 32;
                     chunks.add(chunkKey);
                 }
             }

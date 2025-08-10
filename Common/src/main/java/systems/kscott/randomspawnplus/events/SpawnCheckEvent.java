@@ -8,17 +8,32 @@ import org.bukkit.event.HandlerList;
 public class SpawnCheckEvent extends Event {
 
     private static final HandlerList HANDLERS_LIST = new HandlerList();
+
     private final Location location;
     private boolean valid;
-    private String validReason = "Unknown";
+    private String validReason;
 
     public SpawnCheckEvent(Location location) {
         this.location = location;
         this.valid = true;
+        this.validReason = "Unknown";
     }
 
-    public static HandlerList getHandlerList() {
-        return HANDLERS_LIST;
+    public void setValid(boolean valid, String reason) {
+        this.validReason = reason;
+        this.valid = valid;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public String getValidReason() {
+        return validReason;
     }
 
     @Override
@@ -26,8 +41,7 @@ public class SpawnCheckEvent extends Event {
         return HANDLERS_LIST;
     }
 
-    public void setValid(boolean valid, String reason) {
-        this.validReason = reason;
-        this.valid = valid;
+    public static HandlerList getHandlerList() {
+        return HANDLERS_LIST;
     }
 }

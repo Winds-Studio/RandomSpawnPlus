@@ -25,6 +25,7 @@ public class OnDeath implements Listener {
 
         if (!player.isDead()) return;
 
+        // TODO: set perm as default
         if (Config.getGlobalConfig().randomSpawnUsePermNode && !player.hasPermission("randomspawnplus.randomspawn"))
             return;
 
@@ -38,6 +39,7 @@ public class OnDeath implements Listener {
         try {
             location = SpawnFinder.getRandomSpawn();
         } catch (Exception e) {
+            // TODO: Refactor here, no need to use try/catch to handle failed finding spawn
             RandomSpawnPlus.getInstance().getLogger().warning("The spawn finder failed to find a valid spawn, and has not given " + player.getName() + " a random spawn. If you find this happening a lot, then raise the 'spawn-finder-tries-before-timeout' key in the config.");
             return;
         }
@@ -45,6 +47,7 @@ public class OnDeath implements Listener {
         RandomSpawnEvent randomSpawnEvent = new RandomSpawnEvent(location, player, SpawnType.ON_DEATH);
 
         Bukkit.getServer().getPluginManager().callEvent(randomSpawnEvent);
+
         event.setRespawnLocation(location);
     }
 }

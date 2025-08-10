@@ -2,9 +2,9 @@ name: Build RandomSpawnPlus
 
 on:
   push:
-    branches: [ "feat/nextgen" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     if: "github.actor != 'dependabot[bot]'"
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
       - name: Set up JDK 21
-        uses: actions/setup-java@main
+        uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: zulu
@@ -24,12 +24,12 @@ jobs:
       - name: Build
         run: ./gradlew clean build
 
-      - name: Release RandomSpawnPlus
-        if: github.event_name != 'pull_request'
-        uses: marvinpinto/action-automatic-releases@master
-        with:
-          title: "RandomSpawnPlus"
-          automatic_release_tag: "6.0.0-SNAPSHOT"
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          files: "Common/build/libs/*.jar"
-          prerelease: true
+#      - name: Release RandomSpawnPlus
+#        if: github.event_name != 'pull_request'
+#        uses: marvinpinto/action-automatic-releases@master
+#        with:
+#          title: "RandomSpawnPlus"
+#          automatic_release_tag: "6.0.0-SNAPSHOT"
+#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#          files: "Common/build/libs/*.jar"
+#          prerelease: true

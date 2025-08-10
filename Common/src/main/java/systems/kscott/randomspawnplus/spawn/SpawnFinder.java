@@ -1,11 +1,17 @@
 package systems.kscott.randomspawnplus.spawn;
 
+import net.milkbowl.vault.chat.Chat;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
+import systems.kscott.randomspawnplus.events.SpawnCheckEvent;
+import systems.kscott.randomspawnplus.util.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 public class SpawnFinder {
 
-    public static Location getRandomSpawn() {
+    public static Location getRandomSpawn() throws Exception {
         boolean valid = false;
         Location location = null;
 
@@ -34,7 +40,6 @@ public class SpawnFinder {
         return location.add(0.5, 1, 0.5);
     }
 
-    /*
     public Location getCandidateLocation() {
         String worldString = config.getString("respawn-world");
 
@@ -188,5 +193,4 @@ public class SpawnFinder {
         }
         return minHeight;
     }
-     */
 }

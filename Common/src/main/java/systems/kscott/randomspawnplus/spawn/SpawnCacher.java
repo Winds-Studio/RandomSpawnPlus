@@ -32,7 +32,6 @@ public class SpawnCacher {
         return INSTANCE;
     }
 
-    /*
     private void cacheSpawns() {
         SpawnFinder finder = SpawnFinder.getInstance();
 
@@ -50,7 +49,7 @@ public class SpawnCacher {
 
         Bukkit.getLogger().info("Caching " + missingLocations + " spawns.");
         for (int i = 0; i <= missingLocations; i++) {
-            RandomSpawnPlus.getInstance().foliaLib.getImpl().runLater(() -> {
+            RandomSpawnPlus.getInstance().foliaLib.getScheduler().runLater(() -> {
                 Location location = null;
                 boolean valid = false;
 
@@ -63,21 +62,21 @@ public class SpawnCacher {
             }, 1);
         }
 
-        cacheSpawnTask = RandomSpawnPlus.getInstance().foliaLib.getImpl().runTimer(() -> {
-             Wait for all spawns to be cached
+        cacheSpawnTask = RandomSpawnPlus.getInstance().foliaLib.getScheduler().runTimer(() -> {
+            // Wait for all spawns to be cached
             if (newLocations.size() <= missingLocations) {
                 if (RandomSpawnPlus.getInstance().getConfig().getBoolean("debug-mode")) {
                     System.out.println(newLocations.size() + ", " + missingLocations);
                 }
             } else {
                 cachedSpawns.addAll(newLocations);
-                 Save spawns to file
-                save();
-                RandomSpawnPlus.getInstance().foliaLib.getImpl().cancelTask(cacheSpawnTask);
+                // Save spawns to file
+                // TODO: imple this
+                //save();
+                RandomSpawnPlus.getInstance().foliaLib.getScheduler().cancelTask(cacheSpawnTask);
             }
         }, 10, 10);
     }
-    */
 
     public Location getRandomSpawn() {
         int element = ThreadLocalRandom.current().nextInt(cachedSpawns.size());
