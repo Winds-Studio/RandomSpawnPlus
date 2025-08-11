@@ -1,6 +1,5 @@
 package systems.kscott.randomspawnplus.spawn;
 
-import com.tcoded.folialib.wrapper.task.WrappedTask;
 import org.jetbrains.annotations.Nullable;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
 import systems.kscott.randomspawnplus.config.Config;
@@ -14,8 +13,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SpawnFinder {

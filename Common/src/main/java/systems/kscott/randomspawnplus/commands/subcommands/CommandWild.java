@@ -1,6 +1,5 @@
 package systems.kscott.randomspawnplus.commands.subcommands;
 
-import com.earth2me.essentials.User;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
 import systems.kscott.randomspawnplus.commands.RSPCommand;
 import systems.kscott.randomspawnplus.config.Config;
