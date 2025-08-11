@@ -12,31 +12,31 @@ repositories {
     // PaperMC
     maven {
         name = "papermc-repo"
-        url = uri("https://repo.papermc.io/repository/maven-public/")
+        url = uri("https://repo.papermc.io/repository/maven-public")
     }
 
     // EssentialsX
     maven {
         name = "ess-repo"
-        url = uri("https://repo.essentialsx.net/releases/")
+        url = uri("https://repo.essentialsx.net/releases")
     }
 
     // acf-paper
     maven {
         name = "aikar-repo"
-        url = uri("https://repo.aikar.co/content/groups/aikar/")
+        url = uri("https://repo.aikar.co/content/groups/aikar")
     }
 
     // ConfigurationMaster API
     maven {
         name = "ConfigurationMaster-repo"
-        url = uri("https://repo.bsdevelopment.org/releases/")
+        url = uri("https://repo.bsdevelopment.org/releases")
     }
 
     // JitPack
     maven {
         name = "jitpack.io"
-        url = uri("https://jitpack.io/")
+        url = uri("https://jitpack.io")
     }
 
     // FoliaLib
@@ -47,8 +47,8 @@ repositories {
 }
 
 configure<JavaPluginExtension> {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 tasks {

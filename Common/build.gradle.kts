@@ -17,10 +17,14 @@ dependencies {
     compileOnly("it.unimi.dsi:fastutil:8.5.16")
     implementation("org.bstats:bstats-bukkit:3.1.0")
     api("co.aikar:acf-paper:0.5.1-SNAPSHOT") // TODO: Remove
-    implementation("com.github.technicallycoded:FoliaLib:0.5.1")
+    implementation("com.tcoded:FoliaLib:0.5.1")
     implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.3")
 
-    compileOnly("net.essentialsx:EssentialsX:2.21.2")
+    compileOnly("net.essentialsx:EssentialsX:2.21.2") {
+        // XD
+        exclude("org.spigotmc", "spigot-api")
+        exclude("io.papermc.paper", "paper-api")
+    }
     compileOnly("net.luckperms:api:5.5")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
 

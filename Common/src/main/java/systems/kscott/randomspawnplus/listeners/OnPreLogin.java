@@ -2,7 +2,7 @@ package systems.kscott.randomspawnplus.listeners;
 
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
 import systems.kscott.randomspawnplus.config.Config;
-import systems.kscott.randomspawnplus.platforms.UniversalPlatform;
+import systems.kscott.randomspawnplus.spawn.SpawnData;
 import systems.kscott.randomspawnplus.util.Util;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
@@ -19,7 +19,7 @@ public class OnPreLogin implements Listener {
             return;
         }
 
-        if (!UniversalPlatform.isAllSpawnRangeChunksGenerated()) {
+        if (!SpawnData.isAllSpawnRangeChunksGenerated()) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, Config.getLangConfig().spawnNotInitialized);
         }
 

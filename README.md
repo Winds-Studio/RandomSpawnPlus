@@ -4,7 +4,7 @@
 
 ## Compatibility
 
-- Support Java 17 and higher
+- Support Java 21 and higher
 - Support 1.12.2 - Latest Minecraft version (1.21.8)
 - Compatible with Spigot / Paper / Paper Forks / Forge+Bukkit Hybrid Server
 - Folia Support
@@ -34,21 +34,9 @@ reload listeners
 
 spawn or spawns?
 
-- [ ] CommandRSP
-- [ ] CommandWild
-- [ ] Config
-- [ ] GlobalConfig
-- [ ] LangConfig
-- [ ] SpawnStorage
-- [ ] OnDeath
-- [ ] OnFirstJoin
 - [ ] FoliaPlatform
 - [ ] PaperPlatform
 - [ ] Platforms
-- [ ] UniversalPlatform
-- [ ] SpawnCacher
-- [ ] SpawnFinder
-- [ ] SpawnRegion
 - [ ] Config comments improve
 
 ## Special Thanks To:

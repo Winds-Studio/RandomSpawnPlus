@@ -2,7 +2,6 @@ package systems.kscott.randomspawnplus.spawn;
 
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import systems.kscott.randomspawnplus.config.Config;
-import systems.kscott.randomspawnplus.platforms.UniversalPlatform;
 import systems.kscott.randomspawnplus.util.PlatformUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
