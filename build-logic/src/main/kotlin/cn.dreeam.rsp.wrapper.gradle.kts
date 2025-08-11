@@ -21,12 +21,6 @@ repositories {
         url = uri("https://repo.essentialsx.net/releases")
     }
 
-    // acf-paper
-    maven {
-        name = "aikar-repo"
-        url = uri("https://repo.aikar.co/content/groups/aikar")
-    }
-
     // ConfigurationMaster API
     maven {
         name = "ConfigurationMaster-repo"

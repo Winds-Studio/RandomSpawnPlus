@@ -1,12 +1,8 @@
-package systems.kscott.randomspawnplus.commands;
+package systems.kscott.randomspawnplus.commands.subcommands;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Default;
-import co.aikar.commands.annotation.Description;
 import com.earth2me.essentials.User;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
+import systems.kscott.randomspawnplus.commands.RSPCommand;
 import systems.kscott.randomspawnplus.config.Config;
 import systems.kscott.randomspawnplus.events.RandomSpawnEvent;
 import systems.kscott.randomspawnplus.events.SpawnType;
@@ -20,20 +16,26 @@ import org.bukkit.entity.Player;
 
 import java.time.Instant;
 
-@CommandAlias("wild|rtp")
-@Description("Teleport to a random location")
-public class CommandWild extends BaseCommand {
+public class CommandWild extends RSPCommand {
 
-    @Default
-    @CommandPermission("randomspawnplus.wild")
-    public void wild(CommandSender sender) {
-        /*
-        if (!(sender instanceof Player)) {
+    @Override
+    public String command() {
+        return "wild";
+    }
+
+    @Override
+    public void onCommand(CommandSender sender, String[] args) {
+        if (args.length == 1) {
+            return;
+        }
+    }
+
+    private static void doWild(CommandSender sender) {
+        if (!(sender instanceof Player player)) {
             MessageUtil.send(sender, Config.getLangConfig().playerOnly);
             return;
         }
 
-        Player player = (Player) sender;
         long cooldown = Util.getCooldown(player);
 
         if (player.hasPermission("randomspawnplus.wild.bypasscooldown")) {
@@ -62,8 +64,9 @@ public class CommandWild extends BaseCommand {
         Location location;
 
         try {
-            location = SpawnFinder.getInstance().findSpawn(true);
+            location = SpawnFinder.getRandomSpawn();
         } catch (Exception e) {
+            // TODO: Refactor here, no need to use try/catch to handle failed finding spawn
             MessageUtil.send(player, Config.getLangConfig().errorOnFindingSpawn);
             return;
         }
@@ -75,6 +78,8 @@ public class CommandWild extends BaseCommand {
 
         MessageUtil.send(player, message);
 
+        // TODO: Add essx and other plugin support, like HuskHomes
+        /*
         if (Config.getGlobalConfig().setHomeOnWild && RandomSpawnPlus.getHooks().getEssentials() != null) {
             User user = RandomSpawnPlus.getHooks().getEssentials().getUser(player);
             if (!user.hasHome()) {
@@ -82,6 +87,7 @@ public class CommandWild extends BaseCommand {
                 user.save();
             }
         }
+         */
 
         RandomSpawnEvent randomSpawnEvent = new RandomSpawnEvent(location, player, SpawnType.WILD_COMMAND);
 
@@ -90,10 +96,8 @@ public class CommandWild extends BaseCommand {
         Util.addCooldown(player);
     }
 
-    @Default
-    @CommandPermission("randomspawnplus.wild.others")
-    public void wildOther(CommandSender sender, String otherPlayerString) {
-        Player otherPlayer = Bukkit.getPlayer(otherPlayerString);
+    private static void doWildOther(CommandSender sender, String playerName) {
+        Player otherPlayer = Bukkit.getPlayer(playerName);
 
         if (otherPlayer == null) {
             MessageUtil.send(sender, Config.getLangConfig().invalidPlayer);
@@ -103,8 +107,9 @@ public class CommandWild extends BaseCommand {
         Location location;
 
         try {
-            location = SpawnFinder.getInstance().findSpawn(true);
+            location = SpawnFinder.getRandomSpawn();
         } catch (Exception e) {
+            // TODO: Refactor here, no need to use try/catch to handle failed finding spawn
             MessageUtil.send(otherPlayer, Config.getLangConfig().errorOnFindingSpawn);
             return;
         }
@@ -129,6 +134,5 @@ public class CommandWild extends BaseCommand {
         }
 
         RandomSpawnPlus.getInstance().foliaLib.getScheduler().teleportAsync(otherPlayer, location.add(0.5, 0, 0.5));
-         */
     }
 }

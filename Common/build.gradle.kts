@@ -16,7 +16,6 @@ dependencies {
     compileOnly("org.apache.logging.log4j:log4j-api:2.25.1")
     compileOnly("it.unimi.dsi:fastutil:8.5.16")
     implementation("org.bstats:bstats-bukkit:3.1.0")
-    api("co.aikar:acf-paper:0.5.1-SNAPSHOT") // TODO: Remove
     implementation("com.tcoded:FoliaLib:0.5.1")
     implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.3")
 

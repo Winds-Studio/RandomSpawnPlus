@@ -14,11 +14,12 @@ description: A comprehensive random spawning plugin for modern Minecraft version
 
 commands:
   wild:
-    description: Get a wild spawn
+    description: Teleport to a random location
     usage: /wild [player]
   rsp:
     description: Main plugin command
     usage: /rsp
+    aliases: [randomspawnplus]
 
 permissions:
   rsp.randomspawn:

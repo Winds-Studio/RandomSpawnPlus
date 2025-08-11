@@ -1,22 +1,22 @@
 package systems.kscott.randomspawnplus;
 
-import co.aikar.commands.PaperCommandManager;
 import com.tcoded.folialib.FoliaLib;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import systems.kscott.randomspawnplus.commands.CommandRSP;
-import systems.kscott.randomspawnplus.commands.CommandWild;
+import systems.kscott.randomspawnplus.commands.CommandManager;
+import systems.kscott.randomspawnplus.commands.TabCompleter;
 import systems.kscott.randomspawnplus.config.Config;
 import systems.kscott.randomspawnplus.hooks.HookInstance;
 import systems.kscott.randomspawnplus.listeners.OnDeath;
 import systems.kscott.randomspawnplus.listeners.OnFirstJoin;
 import systems.kscott.randomspawnplus.listeners.OnPreLogin;
-import systems.kscott.randomspawnplus.spawn.SpawnFinder;
 import systems.kscott.randomspawnplus.spawn.SpawnGenerator;
 import systems.kscott.randomspawnplus.util.PlatformUtil;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 
 public final class RandomSpawnPlus extends JavaPlugin {
 
@@ -49,7 +49,6 @@ public final class RandomSpawnPlus extends JavaPlugin {
 
         PlatformUtil.init();
         SpawnGenerator.init();
-        //SpawnCacher.initialize();
     }
 
     @Override
@@ -75,12 +74,10 @@ public final class RandomSpawnPlus extends JavaPlugin {
     }
 
     private void registerCommands() {
-        PaperCommandManager manager = new PaperCommandManager(this);
-        manager.registerCommand(new CommandRSP());
-
-        if (Config.getGlobalConfig().wildEnabled) {
-            manager.registerCommand(new CommandWild());
-        }
+        CommandManager manager = new CommandManager();
+        manager.initSubCommands();
+        getCommand("rsp").setExecutor(manager);
+        getCommand("rsp").setTabCompleter(new TabCompleter());
     }
 
     public static RandomSpawnPlus getInstance() {
