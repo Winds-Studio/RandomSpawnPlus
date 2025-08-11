@@ -7,7 +7,7 @@ import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
-import systems.kscott.randomspawnplus.platforms.UniversalPlatform;
+import systems.kscott.randomspawnplus.spawn.SpawnData;
 import systems.kscott.randomspawnplus.util.MessageUtil;
 import org.bukkit.command.CommandSender;
 
@@ -19,8 +19,8 @@ public class CommandRSP extends BaseCommand {
     @Default
     @Subcommand("help|h")
     public void _main(CommandSender player) {
-        MessageUtil.send(player, String.valueOf(UniversalPlatform.isAllSpawnRangeChunksGenerated()));
-        MessageUtil.send(player, String.valueOf(UniversalPlatform.getPendingGenerateChunksList().size()));
+        MessageUtil.send(player, String.valueOf(SpawnData.isAllSpawnRangeChunksGenerated()));
+        MessageUtil.send(player, String.valueOf(SpawnData.getPendingGenerateChunksList().size()));
         /*
         MessageUtil.send(player,
                 "&8[&3RandomSpawnPlus&8] &7Running &bv" + RandomSpawnPlus.getInstance().getDescription().getVersion() + "&7, made with love &a:^)",

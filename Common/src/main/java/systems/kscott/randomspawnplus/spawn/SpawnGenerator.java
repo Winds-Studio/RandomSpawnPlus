@@ -47,7 +47,7 @@ public class SpawnGenerator {
         prepareChunksTask.thenAccept($ -> {
             // TODO: change to logger or remove
             System.out.println("Prepare chunks took " + (System.currentTimeMillis() - start) + "ms");
-            UniversalPlatform.finalizeSpawnChunksGeneration();
+            SpawnData.finalizeSpawnChunksGeneration();
         });
     }
 
