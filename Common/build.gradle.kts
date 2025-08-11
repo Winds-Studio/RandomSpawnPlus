@@ -41,7 +41,7 @@ tasks {
         archiveFileName = "${rootProject.name}-${project.version}.${archiveExtension.get()}"
         exclude("META-INF/**") // Dreeam - Avoid to include META-INF/maven in Jar
         minimize {
-            exclude(dependency("com.tcoded.folialib:.*:.*"))
+            exclude(dependency("com.tcoded:.*:.*"))
         }
         relocate("net.kyori", "${project.group}.libs.kyori")
         relocate("io.github.thatsmusic99.configurationmaster", "${project.group}.libs.configurationmaster")
