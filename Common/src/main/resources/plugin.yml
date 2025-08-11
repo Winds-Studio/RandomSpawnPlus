@@ -11,7 +11,6 @@ authors:
   - 89apt89
   - Dreeam-qwq
 description: A comprehensive random spawning plugin for modern Minecraft versions.
-load: POSTWORLD
 
 commands:
   wild:
@@ -22,21 +21,21 @@ commands:
     usage: /rsp
 
 permissions:
-  randomspawnplus.randomspawn:
+  rsp.randomspawn:
     description: Enable random spawns
     default: op
-  randomspawnplus.wild:
+  rsp.wild:
     description: Teleport to a random location
     default: op
-  randomspawnplus.wild.others:
+  rsp.wild.others:
     description: Teleport others to a random location
     default: op
-  randomspawnplus.wild.bypasscooldown:
+  rsp.wild.bypasscooldown:
     description: Bypass the teleport cooldown
     default: op
-  randomspawnplus.wild.bypasscost:
+  rsp.wild.bypasscost:
     description: Bypass the /wild cost
     default: op
-  randomspawnplus.manage:
+  rsp.manage:
     description: Access to the /rsp (and /rsp reload) command
     default: op
