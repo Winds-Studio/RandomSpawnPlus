@@ -153,7 +153,6 @@ public class Config {
 
     private ConfigLocale getConfigLocale() {
         if (configLocale != null) {
-            ;
             return configLocale;
         }
 

@@ -1,8 +1,12 @@
 package systems.kscott.randomspawnplus.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
+import io.github.thatsmusic99.configurationmaster.api.ConfigSection;
+import systems.kscott.randomspawnplus.RandomSpawnPlus;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 public class LangConfig {
 
@@ -83,30 +87,156 @@ public class LangConfig {
         createTitledSection("Delay", "delay");
     }
 
-    private void createTitledSection(String title, String path) {
+    // Config Utilities
+
+    /* getAndSet */
+
+    public void createTitledSection(String title, String path) {
         configFile.addSection(title);
         configFile.addDefault(path, null);
     }
 
-    private String getString(String path, String def, String comment) {
+    public boolean getBoolean(String path, boolean def, String comment) {
+        configFile.addDefault(path, def, comment);
+        return configFile.getBoolean(path, def);
+    }
+
+    public boolean getBoolean(String path, boolean def) {
+        configFile.addDefault(path, def);
+        return configFile.getBoolean(path, def);
+    }
+
+    public String getString(String path, String def, String comment) {
         configFile.addDefault(path, def, comment);
         return configFile.getString(path, def);
     }
 
-    private String getString(String path, String def) {
+    public String getString(String path, String def) {
         configFile.addDefault(path, def);
         return configFile.getString(path, def);
     }
 
-    private String getString(String path) {
+    public double getDouble(String path, double def, String comment) {
+        configFile.addDefault(path, def, comment);
+        return configFile.getDouble(path, def);
+    }
+
+    public double getDouble(String path, double def) {
+        configFile.addDefault(path, def);
+        return configFile.getDouble(path, def);
+    }
+
+    public int getInt(String path, int def, String comment) {
+        configFile.addDefault(path, def, comment);
+        return configFile.getInteger(path, def);
+    }
+
+    public int getInt(String path, int def) {
+        configFile.addDefault(path, def);
+        return configFile.getInteger(path, def);
+    }
+
+    public long getLong(String path, long def, String comment) {
+        configFile.addDefault(path, def, comment);
+        return configFile.getLong(path, def);
+    }
+
+    public long getLong(String path, long def) {
+        configFile.addDefault(path, def);
+        return configFile.getLong(path, def);
+    }
+
+    public List<String> getList(String path, List<String> def, String comment) {
+        configFile.addDefault(path, def, comment);
+        return configFile.getStringList(path);
+    }
+
+    public List<String> getList(String path, List<String> def) {
+        configFile.addDefault(path, def);
+        return configFile.getStringList(path);
+    }
+
+    public ConfigSection getConfigSection(String path, Map<String, Object> defaultKeyValue, String comment) {
+        configFile.addDefault(path, null, comment);
+        configFile.makeSectionLenient(path);
+        defaultKeyValue.forEach((string, object) -> configFile.addExample(path + "." + string, object));
+        return configFile.getConfigSection(path);
+    }
+
+    public ConfigSection getConfigSection(String path, Map<String, Object> defaultKeyValue) {
+        configFile.addDefault(path, null);
+        configFile.makeSectionLenient(path);
+        defaultKeyValue.forEach((string, object) -> configFile.addExample(path + "." + string, object));
+        return configFile.getConfigSection(path);
+    }
+
+    /* get */
+
+    public Boolean getBoolean(String path) {
+        String value = configFile.getString(path, null);
+        return value == null ? null : Boolean.parseBoolean(value);
+    }
+
+    public String getString(String path) {
         return configFile.getString(path, null);
     }
 
-    private void addComment(String path, String comment) {
+    public Double getDouble(String path) {
+        String value = configFile.getString(path, null);
+        if (value == null) {
+            return null;
+        }
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            RandomSpawnPlus.LOGGER.warn("{} is not a valid number, skipped! Please check your configuration.", path, e);
+            return null;
+        }
+    }
+
+    public Integer getInt(String path) {
+        String value = configFile.getString(path, null);
+        if (value == null) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            RandomSpawnPlus.LOGGER.warn("{} is not a valid number, skipped! Please check your configuration.", path, e);
+            return null;
+        }
+    }
+
+    public Long getLong(String path) {
+        String value = configFile.getString(path, null);
+        if (value == null) {
+            return null;
+        }
+        try {
+            return Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            RandomSpawnPlus.LOGGER.warn("{} is not a valid number, skipped! Please check your configuration.", path, e);
+            return null;
+        }
+    }
+
+    public List<String> getList(String path) {
+        return configFile.getList(path, null);
+    }
+
+    // TODO, check
+    public ConfigSection getConfigSection(String path) {
+        configFile.addDefault(path, null);
+        configFile.makeSectionLenient(path);
+        //defaultKeyValue.forEach((string, object) -> configFile.addExample(path + "." + string, object));
+        return configFile.getConfigSection(path);
+    }
+
+    public void addComment(String path, String comment) {
         configFile.addComment(path, comment);
     }
 
-    private void addCommentRegionBased(String path, String... comments) {
+    public void addCommentRegionBased(String path, String... comments) {
         configFile.addComment(path, comments[0]); // TODO
     }
 }
