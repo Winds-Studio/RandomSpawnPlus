@@ -56,6 +56,7 @@ public class LangConfig {
         final String commandPath = "command.";
         final String delayPath = "delay.";
 
+        noPerm = getString(generalPath + "no-perm", noPerm);
         playerOnly = getString(generalPath + "player-only", playerOnly);
         errorOnFindingSpawn = getString(generalPath + "error-finding-spawn", errorOnFindingSpawn);
         noSpawnFound = getString(generalPath + "no-spawn-found", noSpawnFound); // TODO Note: Should remove?
