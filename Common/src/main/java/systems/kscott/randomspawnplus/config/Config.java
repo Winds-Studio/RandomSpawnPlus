@@ -92,6 +92,36 @@ public class Config {
         RandomSpawnPlus.LOGGER.info("Successfully loaded config in {}ms.", (System.nanoTime() - begin) / 1_000_000);
     }
 
+    public static void reloadConfig(Plugin instance, CommandSender sender) {
+        long begin = System.nanoTime();
+        RandomSpawnPlus.LOGGER.info("Reloading config...");
+
+        final File pluginFolder = instance.getDataFolder();
+
+        try {
+            createDirectory(pluginFolder);
+        } catch (Exception e) {
+            RandomSpawnPlus.LOGGER.error("Failed to create <{}> plugin folder!", pluginFolder.getAbsolutePath(), e);
+        }
+        try {
+            loadGlobalConfig(pluginFolder, false);
+        } catch (Exception e) {
+            RandomSpawnPlus.LOGGER.error("Failed to reload " + GLOBAL_CONFIG_FILE_NAME + "!", e);
+        }
+        try {
+            loadLangConfig(pluginFolder, false);
+        } catch (Exception e) {
+            RandomSpawnPlus.LOGGER.error("Failed to reload " + LANG_CONFIG_FILE_NAME + "!", e);
+        }
+        try {
+            loadSpawnStorage(pluginFolder, false);
+        } catch (Exception e) {
+            RandomSpawnPlus.LOGGER.error("Failed to reload " + SPAWN_STORAGE_FILE_NAME + "!", e);
+        }
+
+        MessageUtil.send(sender, "&8[&3RandomSpawnPlus&8] Successfully reloaded &bconfig.yml&7, &blang.yml&7, and &bspawns.yml&7 in " + (System.nanoTime() - begin) / 1_000_000 + "ms.");
+    }
+
     private static void loadGlobalConfig(File pluginFolder, boolean init) throws Exception {
         globalConfig = new GlobalConfig(pluginFolder, GLOBAL_CONFIG_FILE_NAME, init);
 

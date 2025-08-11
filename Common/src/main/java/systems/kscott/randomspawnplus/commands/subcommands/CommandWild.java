@@ -8,6 +8,7 @@ import systems.kscott.randomspawnplus.events.RandomSpawnEvent;
 import systems.kscott.randomspawnplus.events.SpawnType;
 import systems.kscott.randomspawnplus.spawn.SpawnFinder;
 import systems.kscott.randomspawnplus.util.MessageUtil;
+import systems.kscott.randomspawnplus.util.Permission;
 import systems.kscott.randomspawnplus.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,7 +26,25 @@ public class CommandWild extends RSPCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (args.length == 1) {
+        if (!sender.hasPermission(Permission.RSP_COMMAND_WILD.getPerm())) {
+            MessageUtil.send(sender, Config.getLangConfig().noPerm);
+            return;
+        }
+
+        if (args.length == 0) {
+            doWild(sender);
+            return;
+        }
+
+        Player onlinePlayer = resolvePlayer(args[1]);
+
+        if (onlinePlayer == null) {
+            MessageUtil.send(sender, Config.getLangConfig().invalidPlayer);
+            return;
+        }
+
+        if (sender.hasPermission(Permission.RSP_COMMAND_WILD_OTHERS.getPerm())) {
+            doWildOther(sender, onlinePlayer);
             return;
         }
     }
@@ -96,14 +115,7 @@ public class CommandWild extends RSPCommand {
         Util.addCooldown(player);
     }
 
-    private static void doWildOther(CommandSender sender, String playerName) {
-        Player otherPlayer = Bukkit.getPlayer(playerName);
-
-        if (otherPlayer == null) {
-            MessageUtil.send(sender, Config.getLangConfig().invalidPlayer);
-            return;
-        }
-
+    private static void doWildOther(CommandSender sender, Player otherPlayer) {
         Location location;
 
         try {
@@ -129,10 +141,10 @@ public class CommandWild extends RSPCommand {
 
         Bukkit.getServer().getPluginManager().callEvent(randomSpawnEvent);
 
-        if (!location.getChunk().isLoaded()) {
-            location.getChunk().load();
-        }
-
         RandomSpawnPlus.getInstance().foliaLib.getScheduler().teleportAsync(otherPlayer, location.add(0.5, 0, 0.5));
+    }
+
+    private Player resolvePlayer(String name) {
+        return Bukkit.getPlayer(name);
     }
 }

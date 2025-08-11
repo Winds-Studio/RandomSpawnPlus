@@ -211,7 +211,6 @@ public class SpawnFinder {
         }, 10, 10);
     }
 
-
     public static Location getRandomSpawn2() {
         int element = ThreadLocalRandom.current().nextInt(cachedSpawns.size());
         return Locations.deserializeLocationString(cachedSpawns.get(element));

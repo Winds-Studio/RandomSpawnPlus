@@ -16,12 +16,8 @@ public class CommandHelp extends RSPCommand {
 
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        if (!sender.hasPermission(Permission.RSP_RANDOMSPAWN.getPerm())) {
-            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.No-Permission"));
-            return;
-        }
-        if (args.length == 0) {
-            sender.sendMessage(Util.formatMessage("Commands.DeathMessages.Sub-Commands.Blacklist.Help"));
+        if (!sender.hasPermission(Permission.RSP_MANAGE.getPerm())) {
+            //sender.sendMessage("No permission"); // TODO: should add this?
             return;
         }
 

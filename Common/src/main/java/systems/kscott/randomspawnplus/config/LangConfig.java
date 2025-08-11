@@ -12,6 +12,7 @@ public class LangConfig {
 
     private static ConfigFile configFile;
 
+    public String noPerm = "&c[!] &7You don't have permission to execute this command.";
     public String playerOnly = "&c[!] &7You must be a player to execute this command.";
     public String errorOnFindingSpawn = "&cUnfortunately, I could not find a valid spawn for you. Please try again.";
     public String noSpawnFound = "The spawn cacher is enabled, but there are no spawns cached. RSP will fall back to on-the-fly spawn generation. This is most likely an issue with your configuration, but you can join the support Discord (or contact apt#8099 on Discord) for help.";

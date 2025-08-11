@@ -25,25 +25,25 @@ public class CommandManager implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String cmdLabel, String[] args) {
+        String label;
+
+        // Redirect to help command if no sub label
         if (args.length == 0) {
-            Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
-                    .stream()
-                    .map(Util::convertFromLegacy)
-                    .forEach(msg -> sender.sendMessage(msg
-                            .replaceText(Util.PREFIX)));
+            label = "help";
         } else {
-            RSPCommand cmd = get(args[0]);
-            if (cmd != null) {
-                String[] trimmedArgs = Arrays.copyOfRange(args, 1, args.length);
-                cmd.onCommand(sender, trimmedArgs);
-                return false;
-            }
-            Messages.getInstance().getConfig().getStringList("Commands.DeathMessages.Help")
-                    .stream()
-                    .map(Util::convertFromLegacy)
-                    .forEach(msg -> sender.sendMessage(msg
-                            .replaceText(Util.PREFIX)));
+            label = args[0];
         }
+
+        RSPCommand cmd = get(label);
+
+        // Unknown command, redirect to help command
+        if (cmd == null) {
+            cmd = get("help");
+        }
+
+        String[] trimmedArgs = Arrays.copyOfRange(args, 1, args.length);
+        cmd.onCommand(sender, trimmedArgs);
+
         return false;
     }
 
