@@ -85,10 +85,10 @@ public class SpawnFinder {
 
             SpawnRegion region = spawnRegions[ThreadLocalRandom.current().nextInt(3)];
 
-            minX = region.getMinX();
-            minZ = region.getMinZ();
-            maxX = region.getMaxX();
-            maxZ = region.getMaxZ();
+            minX = region.minX();
+            minZ = region.minZ();
+            maxX = region.maxX();
+            maxZ = region.maxZ();
         }
 
         int candidateX = Util.getRandomNumberInRange(minX, maxX);
