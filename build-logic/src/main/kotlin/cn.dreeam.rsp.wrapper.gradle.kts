@@ -27,6 +27,12 @@ repositories {
         url = uri("https://repo.bsdevelopment.org/releases")
     }
 
+    // Chunky
+    maven {
+        name = "CodeMC-repo"
+        url = uri("https://repo.codemc.io/repository/maven-public")
+    }
+
     // JitPack
     maven {
         name = "jitpack.io"

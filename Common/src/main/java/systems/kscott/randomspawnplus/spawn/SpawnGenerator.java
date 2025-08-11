@@ -1,11 +1,14 @@
 package systems.kscott.randomspawnplus.spawn;
 
 import it.unimi.dsi.fastutil.longs.LongArrayList;
+import org.popcraft.chunky.api.ChunkyAPI;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
 import systems.kscott.randomspawnplus.config.Config;
+import systems.kscott.randomspawnplus.hooks.HookInstance;
 import systems.kscott.randomspawnplus.util.Locations;
 import systems.kscott.randomspawnplus.util.PlatformUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -47,11 +50,23 @@ public class SpawnGenerator {
         long start = System.currentTimeMillis();
         CompletableFuture<LongArrayList> prepareChunksTask = PlatformUtil.getPlatform().collectNonGeneratedChunksAsync(spawnLevel, minX, minZ, maxX, maxZ);
 
-        prepareChunksTask.thenAccept($ -> {
-            initSpawnPoints();
-            // TODO: change to logger or remove
+        prepareChunksTask.thenAccept(chunks -> {
+            if (chunks.isEmpty()) return;
+
+            System.out.println("Found non-generated chunks: " + chunks.size());
             System.out.println("Prepare chunks took " + (System.currentTimeMillis() - start) + "ms");
+
+            generateSpawnChunks(worldStr, minX, minZ, maxX, maxZ);
+        });
+    }
+
+    private static void generateSpawnChunks(String spawnLevel, int minX, int minZ, int maxX, int maxZ) {
+        ChunkyAPI chunky = RandomSpawnPlus.getHooks().getChunky();
+        chunky.startTask(spawnLevel, "square", minX, minZ, maxX, maxZ, "concentric");
+        chunky.onGenerationComplete(event -> {
+            RandomSpawnPlus.LOGGER.info("Generation completed for {}", event.world());
             SpawnData.finalizeSpawnChunksGeneration();
+            initSpawnPoints();
         });
     }
 

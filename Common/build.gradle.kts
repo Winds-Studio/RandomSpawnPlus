@@ -26,6 +26,7 @@ dependencies {
     }
     compileOnly("net.luckperms:api:5.5")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
+    compileOnly("org.popcraft:chunky-common:1.4.40")
 
     api("net.kyori:adventure-platform-bukkit:4.4.1")
     api("net.kyori:adventure-api:$adventureVersion")

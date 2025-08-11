@@ -4,7 +4,9 @@ import net.ess3.api.IEssentials;
 import net.luckperms.api.LuckPerms;
 import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
+import org.popcraft.chunky.api.ChunkyAPI;
 import systems.kscott.randomspawnplus.RandomSpawnPlus;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -14,7 +16,8 @@ public class HookInstance {
 
     private IEssentials essentials;
     private LuckPerms luckPerms;
-    private static Economy economy;
+    private Economy economy;
+    private ChunkyAPI chunky;
 
     public HookInstance(RandomSpawnPlus pluginInstance) {
         instance = pluginInstance;
@@ -32,23 +35,22 @@ public class HookInstance {
         }
 
         if (instance.getServer().getPluginManager().getPlugin("LuckPerms") != null) {
-            try {
-                setupPermissions();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            setupPermissions();
         } else {
             RandomSpawnPlus.LOGGER.warn("The LuckPerms API is not detected, so the 'remove-permission-on-first-use' config option will not be enabled.");
         }
 
         if (instance.getServer().getPluginManager().getPlugin("Vault") != null) {
-            try {
-                setupEconomy();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            setupEconomy();
         } else {
             RandomSpawnPlus.LOGGER.warn("The Vault API is not detected, so /wild cost will not be enabled.");
+        }
+
+        if (instance.getServer().getPluginManager().getPlugin("Chunky") != null) {
+            chunky = Bukkit.getServer().getServicesManager().load(ChunkyAPI.class);
+        } else {
+            RandomSpawnPlus.LOGGER.warn("You need to have Chunky installed to use RandomSpawnPlus.");
+            RandomSpawnPlus.getInstance().getPluginLoader().disablePlugin(instance);
         }
     }
 
@@ -56,19 +58,14 @@ public class HookInstance {
         RegisteredServiceProvider<LuckPerms> rsp = instance.getServer().getServicesManager().getRegistration(LuckPerms.class);
         if (rsp != null) {
             luckPerms = rsp.getProvider();
-        } else {
-            luckPerms = null;
         }
     }
 
-    private boolean setupEconomy() {
+    private void setupEconomy() {
         RegisteredServiceProvider<Economy> rsp = instance.getServer().getServicesManager().getRegistration(Economy.class);
-
-        if (rsp == null) return false;
-
-        economy = rsp.getProvider();
-
-        return economy != null;
+        if (rsp != null) {
+            economy = rsp.getProvider();
+        }
     }
 
     public HookInstance getInstance() {
@@ -85,5 +82,9 @@ public class HookInstance {
 
     public Economy getEconomy() {
         return economy;
+    }
+
+    public ChunkyAPI getChunky() {
+        return chunky;
     }
 }

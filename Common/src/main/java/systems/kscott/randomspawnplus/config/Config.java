@@ -208,7 +208,7 @@ public class Config {
         return locale;
     }
 
-    enum ConfigLocale {
+    private enum ConfigLocale {
         ENGLISH,
         CHINESE,
         RUSSIAN
