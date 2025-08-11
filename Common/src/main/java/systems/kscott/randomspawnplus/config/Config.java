@@ -21,7 +21,6 @@ import java.util.concurrent.CompletableFuture;
 
 public class Config {
 
-    public static final Logger LOGGER = LogManager.getLogger(Config.class.getSimpleName());
     private static final String CURRENT_REGION = Locale.getDefault().getCountry().toUpperCase(Locale.ROOT);
     private static final String GLOBAL_CONFIG_FILE_NAME = "config.yml";
     private static final String LANG_CONFIG_FILE_NAME = "lang.yml";
@@ -49,13 +48,13 @@ public class Config {
                 loadGlobalConfig(pluginFolder, false);
             } catch (Exception e) {
                 MessageUtil.broadcastCommandMessage(sender, Component.text("Failed to reload " + GLOBAL_CONFIG_FILE_NAME + ". See error in console!", NamedTextColor.RED));
-                LOGGER.error(e);
+                RandomSpawnPlus.LOGGER.error(e);
             }
             try {
                 loadLangConfig(pluginFolder, false);
             } catch (Exception e) {
                 MessageUtil.broadcastCommandMessage(sender, Component.text("Failed to reload " + LANG_CONFIG_FILE_NAME + ". See error in console!", NamedTextColor.RED));
-                LOGGER.error(e);
+                RandomSpawnPlus.LOGGER.error(e);
             }
 
             final String success = String.format("Successfully reloaded config in %sms.", (System.nanoTime() - begin) / 1_000_000);
@@ -65,32 +64,32 @@ public class Config {
 
     public static void loadConfig(Plugin instance) {
         long begin = System.nanoTime();
-        LOGGER.info("Loading config...");
+        RandomSpawnPlus.LOGGER.info("Loading config...");
 
         final File pluginFolder = instance.getDataFolder();
 
         try {
             createDirectory(pluginFolder);
         } catch (Exception e) {
-            LOGGER.error("Failed to create <{}> plugin folder!", pluginFolder.getAbsolutePath(), e);
+            RandomSpawnPlus.LOGGER.error("Failed to create <{}> plugin folder!", pluginFolder.getAbsolutePath(), e);
         }
         try {
             loadGlobalConfig(pluginFolder, true);
         } catch (Exception e) {
-            LOGGER.error("Failed to load " + GLOBAL_CONFIG_FILE_NAME + "!", e);
+            RandomSpawnPlus.LOGGER.error("Failed to load " + GLOBAL_CONFIG_FILE_NAME + "!", e);
         }
         try {
             loadLangConfig(pluginFolder, true);
         } catch (Exception e) {
-            LOGGER.error("Failed to load " + LANG_CONFIG_FILE_NAME + "!", e);
+            RandomSpawnPlus.LOGGER.error("Failed to load " + LANG_CONFIG_FILE_NAME + "!", e);
         }
         try {
             loadSpawnStorage(pluginFolder, true);
         } catch (Exception e) {
-            LOGGER.error("Failed to load " + SPAWN_STORAGE_FILE_NAME + "!", e);
+            RandomSpawnPlus.LOGGER.error("Failed to load " + SPAWN_STORAGE_FILE_NAME + "!", e);
         }
 
-        LOGGER.info("Successfully loaded config in {}ms.", (System.nanoTime() - begin) / 1_000_000);
+        RandomSpawnPlus.LOGGER.info("Successfully loaded config in {}ms.", (System.nanoTime() - begin) / 1_000_000);
     }
 
     private static void loadGlobalConfig(File pluginFolder, boolean init) throws Exception {
@@ -108,7 +107,7 @@ public class Config {
     private static void loadSpawnStorage(File pluginFolder, boolean init) throws Exception {
         spawnStorage = new SpawnStorage(pluginFolder, SPAWN_STORAGE_FILE_NAME, init);
 
-        spawnStorage.saveConfig(pluginFolder);
+        spawnStorage.saveConfig();
     }
 
     public static void createDirectory(File dir) throws IOException {

@@ -33,9 +33,9 @@ public class SpawnStorage {
         config.load(customConfigFile);
     }
 
-    public void saveConfig(File pluginFolder) throws IOException {
+    public void saveConfig() throws IOException {
         // TODO: Check here, better way?
-        String path = Paths.get(pluginFolder.getAbsolutePath(), configFileName).toString();
+        String path = Paths.get(RandomSpawnPlus.getInstance().getDataFolder().getAbsolutePath(), configFileName).toString();
         config.save(path);
     }
 

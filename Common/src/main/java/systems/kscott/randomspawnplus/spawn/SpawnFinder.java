@@ -221,9 +221,9 @@ public class SpawnFinder {
         cachedSpawns.removeIf(locationString -> Locations.serializeString(location).equals(locationString));
         Config.getSpawnStorage().get().set("spawns", cachedSpawns);
         try {
-            Config.getSpawnStorage().saveConfig(RandomSpawnPlus.getInstance().getDataFolder());
+            Config.getSpawnStorage().saveConfig();
         } catch (IOException e) {
-            Config.LOGGER.error("Failed to save " + Config.SPAWN_STORAGE_FILE_NAME + "!", e);
+            RandomSpawnPlus.LOGGER.error("Failed to save " + Config.SPAWN_STORAGE_FILE_NAME + "!", e);
         }
     }
 

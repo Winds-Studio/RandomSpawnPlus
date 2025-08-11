@@ -20,9 +20,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RandomSpawnPlus extends JavaPlugin {
 
+    public static final Logger LOGGER = LogManager.getLogger(RandomSpawnPlus.class.getSimpleName());
+
     private static RandomSpawnPlus INSTANCE;
     private static HookInstance hookInstance;
-    public static final Logger LOGGER = LogManager.getLogger(RandomSpawnPlus.class.getSimpleName());
+
     private BukkitAudiences adventure;
     public FoliaLib foliaLib = new FoliaLib(this);
 
@@ -57,7 +59,11 @@ public final class RandomSpawnPlus extends JavaPlugin {
             this.adventure = null;
         }
 
-        //SpawnCacher.getInstance().save();
+        try {
+            Config.getSpawnStorage().saveConfig();
+        } catch (IOException e) {
+            LOGGER.error("Failed to save " + Config.SPAWN_STORAGE_FILE_NAME + "!", e);
+        }
     }
 
     private void registerEvents() {
