@@ -26,23 +26,18 @@ public class SpawnStorage {
     }
 
     public void reloadConfig() throws IOException, InvalidConfigurationException {
-        File customConfigFile = createFile();
+        File customConfigFile = new File(RandomSpawnPlus.getInstance().getDataFolder(), configFileName);
         config = new YamlConfiguration();
 
-        config.load(customConfigFile);
+        // If first load, create new file
+        if  (customConfigFile.exists() || customConfigFile.createNewFile()) {
+            config.load(customConfigFile);
+        }
     }
 
     public void saveConfig() throws IOException {
         // TODO: Check here, better way?
         String path = Paths.get(RandomSpawnPlus.getInstance().getDataFolder().getAbsolutePath(), configFileName).toString();
         config.save(path);
-    }
-
-    private File createFile() {
-        File customConfigFile = new File(RandomSpawnPlus.getInstance().getDataFolder(), configFileName);
-        if (!customConfigFile.exists() || customConfigFile.getParentFile().mkdirs()) {
-            RandomSpawnPlus.getInstance().saveResource(configFileName, false);
-        }
-        return customConfigFile;
     }
 }

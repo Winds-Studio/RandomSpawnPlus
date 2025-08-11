@@ -146,11 +146,13 @@ public class Config {
     }
 
     public static String getGlobalConfigHeader() {
-        return "#############################\n" +
-                "#      RandomSpawnPlus5     #\n" +
-                "#       Version 6.0.0       #\n" +
-                "#   by @89apt89 & @Dreeam   #\n" +
-                "#############################\n";
+        return """
+                #############################
+                #      RandomSpawnPlus     #
+                #       Version 6.0.0       #
+                #   by @89apt89 & @Dreeam   #
+                #############################
+                """;
     }
 
     public static GlobalConfig getGlobalConfig() {

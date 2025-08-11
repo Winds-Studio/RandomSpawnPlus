@@ -63,8 +63,8 @@ public class GlobalConfig {
         addCommentRegionBased("config-version",
                 Config.getGlobalConfigHeader() +
                         "\n" +
-                        "# NOTE: When modifying values such as spawn-range, and the cache is enabled, you'll need to reset spawns.yml.\n" +
-                        "# This can be accomplished by simply deleting the spawns.yml and restarting the server.\n" +
+                        "NOTE: When modifying values such as spawn-range, and the cache is enabled, you'll need to reset spawns.yml.\n" +
+                        "This can be accomplished by simply deleting the spawns.yml and restarting the server.\n" +
                         "\n" +
                         "Don't touch this!\n"
         );
