@@ -42,7 +42,7 @@ repositories {
     // FoliaLib
     maven {
         name = "devmart-other"
-        url = uri("https://nexuslite.gcnt.net/repos/other/")
+        url = uri("https://repo.tcoded.com/releases")
     }
 }
 
