@@ -22,8 +22,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build
-        run: ./gradlew clean build
+        run: ./gradlew build
 
+# TODO
 #      - name: Release RandomSpawnPlus
 #        if: github.event_name != 'pull_request'
 #        uses: marvinpinto/action-automatic-releases@master
