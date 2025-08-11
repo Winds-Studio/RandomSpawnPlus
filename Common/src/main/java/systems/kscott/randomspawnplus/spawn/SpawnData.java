@@ -1,8 +1,11 @@
 package systems.kscott.randomspawnplus.spawn;
 
+import com.tcoded.folialib.wrapper.task.WrappedTask;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import org.bukkit.Material;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class SpawnData {
@@ -14,6 +17,8 @@ public class SpawnData {
     // Unsafe blocks
     private static Set<Material> unsafeBlocks;
 
+    public static final List<String> cachedSpawns = new ArrayList<>();
+    public static WrappedTask cacheSpawnTask;
 
     // Check whether need to use method, or public field to access directly.
     // Or move to interface as default?

@@ -20,9 +20,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class SpawnFinder {
 
-    private static final List<String> cachedSpawns = new ArrayList<>();
-    private WrappedTask cacheSpawnTask;
-
     public static Location getRandomSpawn() throws Exception {
         boolean valid = false;
         Location location = null;
@@ -33,11 +30,11 @@ public class SpawnFinder {
             if (tries >= 30) {
                 throw new Exception();
             }
-            if (cachedSpawns.isEmpty()) {
+            if (SpawnData.cachedSpawns.isEmpty()) {
                 String msg = Config.getLangConfig().noSpawnFound;
                 RandomSpawnPlus.getInstance().getLogger().severe(msg);
             }
-            if (!cachedSpawns.isEmpty()) {
+            if (!SpawnData.cachedSpawns.isEmpty()) {
                 location = getRandomSpawn2();
             } else {
                 location = getCandidateLocation();
@@ -166,59 +163,14 @@ public class SpawnFinder {
         return isValid;
     }
 
-    private void cacheSpawns() {
-        List<String> locationStrings = Config.getSpawnStorage().get().getStringList("spawns");
-
-        cachedSpawns.addAll(locationStrings);
-
-        int missingLocations = Config.getGlobalConfig().spawnCacheCount - locationStrings.size();
-
-        if (missingLocations <= 0) {
-            return;
-        }
-
-        List<String> newLocations = new ArrayList<>();
-
-        Bukkit.getLogger().info("Caching " + missingLocations + " spawns.");
-        for (int i = 0; i <= missingLocations; i++) {
-            RandomSpawnPlus.getInstance().foliaLib.getScheduler().runLater(() -> {
-                Location location = null;
-                boolean valid = false;
-
-                while (!valid) {
-                    location = getCandidateLocation();
-                    valid = checkSpawn(location);
-                }
-
-                newLocations.add(Locations.serializeString(location));
-            }, 1);
-        }
-
-        cacheSpawnTask = RandomSpawnPlus.getInstance().foliaLib.getScheduler().runTimer(() -> {
-            // Wait for all spawns to be cached
-            if (newLocations.size() <= missingLocations) {
-                if (RandomSpawnPlus.getInstance().getConfig().getBoolean("debug-mode")) {
-                    System.out.println(newLocations.size() + ", " + missingLocations);
-                }
-            } else {
-                cachedSpawns.addAll(newLocations);
-                // Save spawns to file
-                Config.getSpawnStorage().get().set("spawns", cachedSpawns);
-                RandomSpawnPlus.getInstance().saveConfig();
-
-                RandomSpawnPlus.getInstance().foliaLib.getScheduler().cancelTask(cacheSpawnTask);
-            }
-        }, 10, 10);
-    }
-
     public static Location getRandomSpawn2() {
-        int element = ThreadLocalRandom.current().nextInt(cachedSpawns.size());
-        return Locations.deserializeLocationString(cachedSpawns.get(element));
+        int element = ThreadLocalRandom.current().nextInt(SpawnData.cachedSpawns.size());
+        return Locations.deserializeLocationString(SpawnData.cachedSpawns.get(element));
     }
 
     public static void deleteSpawn(Location location) {
-        cachedSpawns.removeIf(locationString -> Locations.serializeString(location).equals(locationString));
-        Config.getSpawnStorage().get().set("spawns", cachedSpawns);
+        SpawnData.cachedSpawns.removeIf(locationString -> Locations.serializeString(location).equals(locationString));
+        Config.getSpawnStorage().get().set("spawns", SpawnData.cachedSpawns);
         try {
             Config.getSpawnStorage().saveConfig();
         } catch (IOException e) {
