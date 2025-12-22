@@ -3,7 +3,7 @@ plugins {
     id("com.gradleup.shadow") version "9.0.1"
 }
 
-val adventureVersion = "4.25.0"
+val adventureVersion = "4.26.1"
 
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
